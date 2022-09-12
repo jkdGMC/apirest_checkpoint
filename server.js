@@ -1,4 +1,5 @@
 require('./config/db.config');
+require('dotenv').config();
 
 const express = require('express');
 const app = express();
@@ -8,7 +9,7 @@ const User = require('./models/User')
 //GET RETURN ALL ROUTES
 app.get('/users', async (request,response) => {
     const users = await User.find();
-    response.json(users);
+    return response.json(users);
 });
 
 
@@ -20,19 +21,19 @@ app.post('/user/new', (request,response) => {
     })
 
     response.save();
-    response.json(user);
+    return response.json(user);
 });
 
 //PUT : EDIT A USER BY ID 
 app.put('/user/update/:id', (request,response) => {
     const {id} = request.params
-    const user = User.findById(id)
-
-    user.username = request.body.username;
-    user.email = request.body.email;
+    const user = User.findByIdAndUpdate(id, {
+        username: request.body.username.value,
+        email: request.body.email.value
+    },{new: true},(error,user) => !error ? console.log(user):console.error(error))
 
     response.save();
-    response.json(user);
+    return response.json(user);
 });
 
 //DELETE : REMOVE A USER BY ID 
@@ -41,7 +42,7 @@ app.delete('/user/delete/:id', async (request,response) => {
     const {id} = request.params;
     const user = await findByIdAndDelete(id);
 
-    response.json(user);
+    return response.json(user);
 })
 
-app.listen(3001, () => console.log('Server running on port 3001'));
+app.listen(process.env.PORT, () => console.log('Server running on port : ', process.env.PORT));
