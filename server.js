@@ -9,6 +9,7 @@ const User = require('./models/User')
 //GET RETURN ALL ROUTES
 app.get('/users', async (request,response) => {
     const users = await User.find();
+    
     return response.json(users);
 });
 

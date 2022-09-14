@@ -7,4 +7,3 @@ mongoose.connect(process.env.MONGODB_URI,{
 })
     .then(() => console.log('Connected to mongodb database ! ;)'))
     .catch(console.error);
-
